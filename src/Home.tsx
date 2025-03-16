@@ -1,4 +1,7 @@
-function App() {
+import { Button } from "@/components/ui"
+import FloatingLabelInput from "./components/ui/floating-label-input"
+
+function Home() {
   return (
     <div className="flex h-screen flex-row bg-pale">
       <div className="flex w-full flex-col items-center justify-center">
@@ -15,11 +18,10 @@ function App() {
           </header>
 
           <div className="flex flex-col gap-4">
-            <input type="text" placeholder="your name" />
-
-            <button className="relative hover:cursor-pointer bg-orange hover:focus:bg-yellow-600 text-white text-lg font-bold py-3 px-8 rounded-full mt-6 transition-transform transform outline-none overflow-hidden duration-300 hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(255,152,0,0.3)] focus:-translate-y-1 focus:shadow-[0_10px_20px_rgba(255,152,0,0.3)] before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gradient-to-r before:from-[rgba(255,255,255,0.1)] before:to-[rgba(255,255,255,0.3)] before:-translate-x-full before:transition-transform before:duration-[600ms] hover:before:translate-x-full focus:before:translate-x-full">
+            <FloatingLabelInput label="Enter your name" />
+            <Button variant="cta" size="lg">
               Start game
-            </button>
+            </Button>
           </div>
         </form>
       </div>
@@ -27,4 +29,4 @@ function App() {
   )
 }
 
-export default App
+export { Home }
