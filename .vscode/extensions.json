@@ -1,0 +1,18 @@
+{
+  "recommendations": [
+    // Syntax highlighting and editor integration for .editorconfig
+    "EditorConfig.EditorConfig",
+    // Display the CODEOWNER for the current file
+    "hcoban.codeowners",
+    // Editor integration for ESLint
+    "dbaeumer.vscode-eslint",
+    // Editor integration for Prettier
+    "esbenp.prettier-vscode",
+    // IntelliSense for Tailwind CSS
+    "bradlc.vscode-tailwindcss",
+    // Editor integration for Markdownlint
+    "davidanson.vscode-markdownlint",
+    // Live Share for pair programming sessions
+    "ms-vsliveshare.vsliveshare"
+  ]
+}
