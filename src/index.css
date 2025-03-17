@@ -45,23 +45,11 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+@import "tailwindcss";
+
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
-
-@theme {
-  /* Colors Check https://mycolor.space/?hex=%23F79413&sub=1 */
-  --color-orange: #f79413;
-  --color-orange-light: #ffab8a;
-
-  --color-pale: #ffebcd;
-  --color-beige: #b9a89b;
-  --color-green-light: #00c972;
-  --color-green: #009041;
-  --color-red: #c35354;
-}
-
-@import "tailwindcss";
 
 .dark {
   --background: oklch(0.145 0 0);
@@ -142,4 +130,21 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@theme {
+  /* Colors Check https://mycolor.space/?hex=%23F79413&sub=1 */
+  --color-orange: #f79413;
+  --color-orange-light: #ffab8a;
+
+  --color-pale: #ffebcd;
+  --color-beige: #b9a89b;
+  --color-green-light: #00c972;
+  --color-green: #009041;
+  --color-red: #c35354;
+}
+
+.bounce-three-times {
+  animation-iteration-count: 3.5;
+  /* --tw-animation: bounce 1s ease-in-out 3; */
 }

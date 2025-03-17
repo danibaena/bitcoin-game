@@ -5,7 +5,7 @@ type Props = {
   label: string
 }
 
-export default function FloatingLabelInput({ label, ...props }: Props) {
+function FloatingLabelInput({ label, ...props }: Props) {
   const [isFocused, setIsFocused] = useState(false)
   const [value, setValue] = useState("")
 
@@ -28,3 +28,5 @@ export default function FloatingLabelInput({ label, ...props }: Props) {
     </div>
   )
 }
+
+export { FloatingLabelInput }

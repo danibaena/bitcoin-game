@@ -1,17 +1,18 @@
 import { Home } from "@/Home"
+import { GameProvider } from "@/hooks/use-game"
 import "@/index.css"
-import About from "@/pages/About"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import React from "react"
 import ReactDOM from "react-dom/client"
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
-const router = createBrowserRouter([
-  { path: "/", element: <Home /> },
-  { path: "/about", element: <About /> },
-])
+const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <GameProvider>
+        <Home />
+      </GameProvider>
+    </QueryClientProvider>
   </React.StrictMode>,
 )
