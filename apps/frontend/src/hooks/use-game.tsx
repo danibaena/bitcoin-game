@@ -1,6 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
 import { createContext, useContext, useEffect, useState } from "react"
 
+const TOTAL_COUNTDOWN_MILLISECONDS = 60000
+const TOTAL_POLLING_INTERVAL_MILLISECONDS = 10000
+const COUNTDOWN_INTERVAL_MILLISECONDS = 1000
+
 interface GameState {
   score: number
   currentPrice: number | null | undefined
@@ -25,7 +29,6 @@ export enum GuessDirection {
 }
 
 const fetchBitcoinPrice = async () => {
-  // return 80000
   const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd")
   const data: BitcoinPriceData = await response.json()
   return data.bitcoin.usd
@@ -42,8 +45,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { data: currentPrice, isLoading: isloadingPrice } = useQuery({
     queryKey: ["bitcoinPrice"],
     queryFn: fetchBitcoinPrice,
-    refetchInterval: 10000,
-    enabled: false,
+    refetchInterval: TOTAL_POLLING_INTERVAL_MILLISECONDS,
   })
 
   useEffect(() => {
@@ -56,7 +58,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (guess && previousPrice !== null && currentPrice !== null && currentPrice !== undefined && guessTimestamp) {
       const timeElapsed = Date.now() - guessTimestamp
 
-      if (timeElapsed >= 60000 && previousPrice !== currentPrice) {
+      if (timeElapsed >= TOTAL_COUNTDOWN_MILLISECONDS && previousPrice !== currentPrice) {
         const isCorrect = (guess === GuessDirection.up && currentPrice > previousPrice) || (guess === GuessDirection.down && currentPrice < previousPrice)
         setScore((prevScore) => prevScore + (isCorrect ? 1 : -1))
 
@@ -74,7 +76,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (guessResolutionCountdown !== null && guessResolutionCountdown > 0) {
       timer = setInterval(() => {
         setGuessResolutionCountdown((prev) => (prev !== null && prev > 0 ? prev - 1 : null))
-      }, 1000)
+      }, COUNTDOWN_INTERVAL_MILLISECONDS)
     }
 
     return () => {
@@ -84,7 +86,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const makeGuess = (direction: GuessDirection) => {
     if (guess === null) {
-      setGuessResolutionCountdown(60)
+      setGuessResolutionCountdown(TOTAL_COUNTDOWN_MILLISECONDS / COUNTDOWN_INTERVAL_MILLISECONDS)
       setGuess(direction)
       setGuessTimestamp(Date.now())
     }
