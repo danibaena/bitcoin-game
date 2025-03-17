@@ -29,15 +29,19 @@ function Home() {
                 onClick={() => {
                   makeGuess(GuessDirection.up)
                 }}
+                size="lg"
+                className="text-xl"
                 disabled={isGuessing}
               >
-                Price will go higher 🚀
+                Price will go higher <span className="inline-block">🚀</span>
               </Button>
               <Button
                 variant="red"
                 onClick={() => {
                   makeGuess(GuessDirection.down)
                 }}
+                size="lg"
+                className="text-xl"
                 disabled={isGuessing}
               >
                 Price will go lower <span className="inline-block rotate-90">🚀</span>
