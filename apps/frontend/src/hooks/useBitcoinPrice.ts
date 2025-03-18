@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 
-// const TOTAL_POLLING_INTERVAL_MILLISECONDS = 10000
-const TOTAL_POLLING_INTERVAL_MILLISECONDS = 3000
+const TOTAL_POLLING_INTERVAL_MILLISECONDS = 10000
 
 export type BitcoinPriceData = {
   bitcoin: {
@@ -26,10 +25,10 @@ export const useBitcoinPrice = () => {
   })
 
   useEffect(() => {
-    if (currentPrice !== undefined) {
-      setPreviousPrice((prev) => (prev !== currentPrice ? prev : prev))
+    if (currentPrice !== undefined && previousPrice !== currentPrice) {
+      setPreviousPrice(currentPrice)
     }
-  }, [currentPrice])
+  }, [currentPrice, previousPrice])
 
   return {
     currentPrice,

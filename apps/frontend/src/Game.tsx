@@ -1,5 +1,6 @@
 import { Button, LoadingSpinner, Logo } from "@/components/ui"
-import { GuessDirection, useGame } from "@/hooks"
+import { GuessDirection } from "@/hooks"
+import { useGame } from "@/lib/providers"
 import { useEffect, useMemo, useState } from "react"
 
 const SHOW_RESULT_MILLISECONDS = 5000
