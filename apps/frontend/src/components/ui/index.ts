@@ -1,3 +1,3 @@
-export * from "./button"
-export * from "./floating-label-input"
-export * from "./input"
+export * from "./Button"
+export * from "./LoadingSpinner"
+export * from "./Logo"
