@@ -11,13 +11,11 @@ export const Game = () => {
   const [showResult, setShowResult] = useState(false)
 
   useEffect(() => {
-    console.log("guessResolved", guessResolved)
     if (guessResolved) {
       setShowResult(true)
 
       const timer = setTimeout(() => {
         setShowResult(false)
-        console.log("hiding result")
       }, SHOW_RESULT_MILLISECONDS)
 
       return () => clearTimeout(timer)
