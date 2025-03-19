@@ -1,7 +1,6 @@
+import { TOTAL_POLLING_INTERVAL_MILLISECONDS } from "@/constants"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
-
-const TOTAL_POLLING_INTERVAL_MILLISECONDS = 10000
 
 export type BitcoinPriceData = {
   bitcoin: {

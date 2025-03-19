@@ -1,4 +1,5 @@
-import { COUNTDOWN_INTERVAL_MILLISECONDS, useCountdown } from "@/hooks"
+import { COUNTDOWN_INTERVAL_MILLISECONDS } from "@/constants"
+import { useCountdown } from "@/hooks"
 import { act, renderHook } from "@testing-library/react"
 import { vi } from "vitest"
 

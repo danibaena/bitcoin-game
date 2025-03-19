@@ -1,9 +1,8 @@
 import { Button, LoadingSpinner, Logo } from "@/components/ui"
+import { SHOW_RESULT_MILLISECONDS } from "@/constants"
 import { GuessDirection } from "@/hooks"
 import { useGame } from "@/lib/providers"
 import { useEffect, useMemo, useState } from "react"
-
-const SHOW_RESULT_MILLISECONDS = 5000
 
 export const Game = () => {
   const { score, currentPrice, isLoadingPrice, makeGuess, guessResolutionCountdown } = useGame()

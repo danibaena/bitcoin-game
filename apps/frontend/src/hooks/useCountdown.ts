@@ -1,6 +1,5 @@
+import { COUNTDOWN_INTERVAL_MILLISECONDS } from "@/constants"
 import { useEffect, useState } from "react"
-
-export const COUNTDOWN_INTERVAL_MILLISECONDS = 1000
 
 export const useCountdown = (initialValue: number | null) => {
   const [countdown, setCountdown] = useState<number | null>(initialValue)

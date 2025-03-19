@@ -1,9 +1,6 @@
+import { COUNTDOWN_INTERVAL_MILLISECONDS, TOTAL_COUNTDOWN_MILLISECONDS } from "@/constants"
 import { GuessDirection, useBitcoinPrice, useCountdown, useGuess } from "@/hooks"
 import { useEffect, useState } from "react"
-
-// const TOTAL_COUNTDOWN_MILLISECONDS = 60000
-const TOTAL_COUNTDOWN_MILLISECONDS = 5000
-const COUNTDOWN_INTERVAL_MILLISECONDS = 1000
 
 export const useGameState = () => {
   const [score, setScore] = useState<number>(0)
