@@ -1,21 +1,34 @@
-import { COUNTDOWN_INTERVAL_MILLISECONDS } from "@/constants"
+import { COUNTDOWN_INTERVAL_MILLISECONDS, TOTAL_COUNTDOWN_MILLISECONDS } from "@/constants"
 import { useEffect, useState } from "react"
 
-export const useCountdown = (initialValue: number | null) => {
+type CountdownHook = {
+  countdown: number | null
+  startCountdown: () => void
+  stopCountdown: () => void
+}
+
+export const useCountdown = (initialValue: number | null): CountdownHook => {
   const [countdown, setCountdown] = useState<number | null>(initialValue)
 
   useEffect(() => {
-    if (countdown === null || countdown <= 0) return
+    if (countdown === null || countdown <= 0) {
+      return
+    }
 
-    const timer: NodeJS.Timeout = setInterval(() => {
-      setCountdown((prev: number | null) => (prev !== null && prev > 1 ? prev - 1 : null))
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev === null || prev <= 1) {
+          return null
+        }
+        return prev - 1
+      })
     }, COUNTDOWN_INTERVAL_MILLISECONDS)
 
     return () => clearInterval(timer)
   }, [countdown])
 
-  const startCountdown = (seconds: number): void => {
-    setCountdown(seconds)
+  const startCountdown = (): void => {
+    setCountdown(Math.ceil(TOTAL_COUNTDOWN_MILLISECONDS / COUNTDOWN_INTERVAL_MILLISECONDS))
   }
 
   const stopCountdown = (): void => {

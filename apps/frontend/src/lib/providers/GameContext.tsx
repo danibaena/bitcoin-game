@@ -7,6 +7,12 @@ interface GameState {
   isLoadingPrice: boolean
   makeGuess: (direction: GuessDirection) => void
   guessResolutionCountdown: number | null
+
+  currentGuess: GuessDirection | null
+  guessTimestamp: number | null
+  guessResolved: boolean
+  lastGuessDirection: GuessDirection | null
+  lastGuessCorrect: boolean | null
 }
 
 const GameContext = createContext<GameState | undefined>(undefined)

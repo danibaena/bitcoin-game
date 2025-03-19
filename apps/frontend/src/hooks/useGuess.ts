@@ -5,11 +5,18 @@ export enum GuessDirection {
   down = "down",
 }
 
-export const useGuess = () => {
+export interface GuessHook {
+  currentGuess: GuessDirection | null
+  guessTimestamp: number | null
+  makeGuess: (direction: GuessDirection) => boolean
+  resetGuess: () => void
+}
+
+export const useGuess = (): GuessHook => {
   const [guess, setGuess] = useState<GuessDirection | null>(null)
   const [guessTimestamp, setGuessTimestamp] = useState<number | null>(null)
 
-  const makeGuess = (direction: GuessDirection) => {
+  const makeGuess = (direction: GuessDirection): boolean => {
     if (guess === null) {
       setGuess(direction)
       setGuessTimestamp(Date.now())
@@ -18,7 +25,7 @@ export const useGuess = () => {
     return false
   }
 
-  const resetGuess = () => {
+  const resetGuess = (): void => {
     setGuess(null)
     setGuessTimestamp(null)
   }
