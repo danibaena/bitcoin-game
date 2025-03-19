@@ -1,9 +1,9 @@
-import { COUNTDOWN_INTERVAL_MILLISECONDS } from "@/constants"
-import { useCountdown } from "@/hooks"
+import { COUNTDOWN_INTERVAL_MILLISECONDS, TOTAL_COUNTDOWN_MILLISECONDS } from "@/constants"
+import { useCountdown } from "@/hooks/useCountdown"
 import { act, renderHook } from "@testing-library/react"
-import { vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-describe("useCountdown hook", () => {
+describe("useCountdown", () => {
   beforeEach(() => {
     vi.useFakeTimers()
   })
@@ -12,59 +12,65 @@ describe("useCountdown hook", () => {
     vi.useRealTimers()
   })
 
-  it("should initialize with the given value", () => {
-    const { result } = renderHook(() => useCountdown(10))
-
-    expect(result.current.countdown).toBe(10)
+  it("should initialize with null countdown", () => {
+    const { result } = renderHook(() => useCountdown())
+    expect(result.current.countdown).toBeNull()
   })
 
-  it("should decrement countdown every second", () => {
-    const { result } = renderHook(() => useCountdown(3))
+  it("should start countdown with proper initial value", () => {
+    const { result } = renderHook(() => useCountdown())
 
     act(() => {
-      vi.advanceTimersByTime(COUNTDOWN_INTERVAL_MILLISECONDS)
+      result.current.startCountdown()
     })
-    expect(result.current.countdown).toBe(2)
 
-    act(() => {
-      vi.advanceTimersByTime(COUNTDOWN_INTERVAL_MILLISECONDS)
-    })
-    expect(result.current.countdown).toBe(1)
-
-    act(() => {
-      vi.advanceTimersByTime(COUNTDOWN_INTERVAL_MILLISECONDS)
-    })
-    expect(result.current.countdown).toBe(null)
+    const expectedInitialCount = Math.ceil(TOTAL_COUNTDOWN_MILLISECONDS / COUNTDOWN_INTERVAL_MILLISECONDS)
+    expect(result.current.countdown).toBe(expectedInitialCount)
   })
 
-  it("should start countdown when startCountdown is called", () => {
-    const { result } = renderHook(() => useCountdown(null))
+  it("should decrement countdown on interval", () => {
+    const { result } = renderHook(() => useCountdown())
 
     act(() => {
-      result.current.startCountdown(5)
+      result.current.startCountdown()
     })
-    expect(result.current.countdown).toBe(5)
+
+    const initialCount = result.current.countdown as number
 
     act(() => {
       vi.advanceTimersByTime(COUNTDOWN_INTERVAL_MILLISECONDS)
     })
-    expect(result.current.countdown).toBe(4)
+
+    expect(result.current.countdown).toBe(initialCount - 1)
   })
 
-  it("should stop countdown when stopCountdown is called", () => {
-    const { result } = renderHook(() => useCountdown(5))
+  it("should stop countdown and set to null when complete", () => {
+    const { result } = renderHook(() => useCountdown())
+
+    act(() => {
+      result.current.startCountdown()
+    })
+
+    const totalTime = COUNTDOWN_INTERVAL_MILLISECONDS * Math.ceil(TOTAL_COUNTDOWN_MILLISECONDS / COUNTDOWN_INTERVAL_MILLISECONDS)
+
+    act(() => {
+      vi.advanceTimersByTime(totalTime)
+    })
+
+    expect(result.current.countdown).toBeNull()
+  })
+
+  it("should stop countdown when requested", () => {
+    const { result } = renderHook(() => useCountdown())
+
+    act(() => {
+      result.current.startCountdown()
+    })
 
     act(() => {
       result.current.stopCountdown()
     })
-    expect(result.current.countdown).toBe(null)
-  })
 
-  it("should not decrement if countdown is null", () => {
-    const { result } = renderHook(() => useCountdown(null))
-    act(() => {
-      vi.advanceTimersByTime(COUNTDOWN_INTERVAL_MILLISECONDS)
-    })
-    expect(result.current.countdown).toBe(null)
+    expect(result.current.countdown).toBeNull()
   })
 })

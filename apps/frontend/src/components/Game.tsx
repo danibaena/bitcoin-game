@@ -6,23 +6,8 @@ import { cn } from "@/lib/utils"
 import { useEffect, useState } from "react"
 
 export const Game = () => {
-  const { score, currentPrice, isLoadingPrice, makeGuess, guessResolutionCountdown, currentGuess, guessResolved, lastGuessDirection, lastGuessCorrect } =
+  const { score, currentPrice, isLoadingPrice, makeGuess, guessResolutionCountdown, isGuessing, guessResolved, lastGuessDirection, lastGuessCorrect } =
     useGame()
-  const [showResult, setShowResult] = useState(false)
-
-  useEffect(() => {
-    if (guessResolved) {
-      setShowResult(true)
-
-      const timer = setTimeout(() => {
-        setShowResult(false)
-      }, SHOW_RESULT_MILLISECONDS)
-
-      return () => clearTimeout(timer)
-    }
-  }, [guessResolved])
-
-  const isGuessing = currentGuess !== null
 
   return (
     <div className="flex h-screen flex-row bg-pale">
@@ -50,10 +35,8 @@ export const Game = () => {
 
           <footer className="flex flex-col items-center gap-4 text-center">
             <ScoreDisplay score={score} />
-
-            {isGuessing && guessResolutionCountdown !== null && <CountdownDisplay seconds={guessResolutionCountdown} />}
-
-            {showResult && <GuessResultDisplay isVisible={true} isCorrect={lastGuessCorrect} guessDirection={lastGuessDirection} />}
+            <CountdownDisplay isGuessing={isGuessing} seconds={guessResolutionCountdown} />
+            <GuessResultDisplay guessResolved={guessResolved} isCorrect={lastGuessCorrect} guessDirection={lastGuessDirection} />
           </footer>
         </div>
       </div>
@@ -61,34 +44,62 @@ export const Game = () => {
   )
 }
 
-const PriceDisplay = ({ price, isLoading }: { price: number | null | undefined; isLoading: boolean }) => (
-  <div className="flex gap-8 justify-between items-center w-1/2">
-    <p className="text-black">Current price is:</p>
-    {isLoading || price === undefined || price === null ? <LoadingSpinner /> : <span className="text-orange">${price.toLocaleString()}</span>}
-  </div>
-)
+const PriceDisplay = ({ price, isLoading }: { price: number | null | undefined; isLoading: boolean }) => {
+  return (
+    <div className="flex gap-8 justify-center items-center">
+      <p className="text-black">Current price is:</p>
+      {isLoading || price === undefined || price === null ? <LoadingSpinner /> : <span className="text-orange">${price.toLocaleString()}</span>}
+    </div>
+  )
+}
 
-const CountdownDisplay = ({ seconds }: { seconds: number | null }) => (
-  <div className="flex flex-col gap-2 justify-around items-center">{seconds !== null && <p>Waiting for guess resolution: {seconds}s</p>}</div>
-)
+const CountdownDisplay = ({ seconds, isGuessing }: { seconds: number | null; isGuessing: boolean }) => {
+  if (!isGuessing || seconds === null) {
+    return
+  }
 
-const ScoreDisplay = ({ score }: { score: number }) => (
-  <>
-    <h2 className="text-2xl font-bold text-black">Your score</h2>
-    <div className="text-4xl text-bold flex gap-8 justify-around">{score}</div>
-  </>
-)
+  return (
+    <div className="flex flex-col gap-2 justify-around items-center">
+      <p>Waiting for guess resolution: {seconds}s</p>
+    </div>
+  )
+}
+
+const ScoreDisplay = ({ score }: { score: number }) => {
+  return (
+    <>
+      <h2 className="text-2xl font-bold text-black">Your score</h2>
+      <div className="text-4xl text-bold flex gap-8 justify-around">{score}</div>
+    </>
+  )
+}
 
 const GuessResultDisplay = ({
-  isVisible,
+  guessResolved,
   isCorrect,
   guessDirection,
 }: {
-  isVisible: boolean
+  guessResolved: boolean
   isCorrect: boolean | null
   guessDirection: GuessDirection | null
 }) => {
-  if (!isVisible || isCorrect === null || guessDirection === null) return null
+  const [showResult, setShowResult] = useState(false)
+
+  useEffect(() => {
+    if (guessResolved) {
+      setShowResult(true)
+
+      const timer = setTimeout(() => {
+        setShowResult(false)
+      }, SHOW_RESULT_MILLISECONDS)
+
+      return () => clearTimeout(timer)
+    }
+  }, [guessResolved])
+
+  if (!guessResolved || !showResult) {
+    return
+  }
 
   return (
     <div className={cn("mt-4 p-4 rounded-xl text-center", isCorrect ? "bg-green-100" : "bg-red-100")}>

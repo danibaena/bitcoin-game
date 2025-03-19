@@ -7,8 +7,8 @@ type CountdownHook = {
   stopCountdown: () => void
 }
 
-export const useCountdown = (initialValue: number | null): CountdownHook => {
-  const [countdown, setCountdown] = useState<number | null>(initialValue)
+export const useCountdown = (): CountdownHook => {
+  const [countdown, setCountdown] = useState<number | null>(null)
 
   useEffect(() => {
     if (countdown === null || countdown <= 0) {

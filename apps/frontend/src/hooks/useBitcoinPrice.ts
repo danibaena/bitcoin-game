@@ -1,6 +1,5 @@
 import { TOTAL_POLLING_INTERVAL_MILLISECONDS } from "@/constants"
 import { useQuery } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
 
 export type BitcoinPriceData = {
   bitcoin: {
@@ -24,35 +23,15 @@ const fetchBitcoinPrice = async (): Promise<number> => {
 }
 
 export const useBitcoinPrice = () => {
-  const [previousPrice, setPreviousPrice] = useState<number | null>(null)
-  const [priceHasChanged, setPriceHasChanged] = useState(false)
-
   const { data: currentPrice, isLoading: isLoadingPrice } = useQuery({
     queryKey: ["bitcoinPrice"],
     queryFn: fetchBitcoinPrice,
     refetchInterval: TOTAL_POLLING_INTERVAL_MILLISECONDS,
   })
 
-  useEffect(() => {
-    if (currentPrice === undefined || currentPrice === null) {
-      return
-    }
-
-    if (previousPrice === null) {
-      setPreviousPrice(currentPrice)
-      setPriceHasChanged(false)
-    } else if (previousPrice !== currentPrice) {
-      setPriceHasChanged(true)
-    }
-  }, [currentPrice, previousPrice])
-
   return {
     currentPrice,
-    previousPrice,
-    setPreviousPrice,
     isLoadingPrice,
-    priceHasChanged,
-    resetPriceChanged: () => setPriceHasChanged(false),
   }
 }
 

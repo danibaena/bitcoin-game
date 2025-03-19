@@ -1,7 +1,8 @@
-import { GuessDirection, useGuess } from "@/hooks"
+import { GuessDirection, useGuess } from "@/hooks/useGuess"
 import { act, renderHook } from "@testing-library/react"
+import { describe, expect, it } from "vitest"
 
-describe("useGuess hook", () => {
+describe("useGuess", () => {
   it("should initialize with null values", () => {
     const { result } = renderHook(() => useGuess())
 
@@ -9,39 +10,40 @@ describe("useGuess hook", () => {
     expect(result.current.guessTimestamp).toBeNull()
   })
 
-  it("should set guess and timestamp when making a guess", () => {
+  it("should make a guess successfully when no active guess exists", () => {
     const { result } = renderHook(() => useGuess())
 
+    let success
     act(() => {
-      result.current.makeGuess(GuessDirection.up)
+      success = result.current.makeGuess(GuessDirection.up)
     })
 
+    expect(success).toBe(true)
     expect(result.current.currentGuess).toBe(GuessDirection.up)
     expect(result.current.guessTimestamp).not.toBeNull()
   })
 
-  it("should not change guess if already set", () => {
+  it("should reject a guess when one is already active", () => {
     const { result } = renderHook(() => useGuess())
 
     act(() => {
       result.current.makeGuess(GuessDirection.up)
     })
-    const firstTimestamp = result.current.guessTimestamp
 
+    let secondGuessSuccess
     act(() => {
-      const secondAttempt = result.current.makeGuess(GuessDirection.down)
-      expect(secondAttempt).toBe(false)
+      secondGuessSuccess = result.current.makeGuess(GuessDirection.down)
     })
 
-    expect(result.current.currentGuess).toBe(GuessDirection.up)
-    expect(result.current.guessTimestamp).toBe(firstTimestamp)
+    expect(secondGuessSuccess).toBe(false)
+    expect(result.current.currentGuess).toBe(GuessDirection.up) // Still the first guess
   })
 
-  it("should reset guess and timestamp", () => {
+  it("should reset the guess state", () => {
     const { result } = renderHook(() => useGuess())
 
     act(() => {
-      result.current.makeGuess(GuessDirection.down)
+      result.current.makeGuess(GuessDirection.up)
     })
 
     act(() => {

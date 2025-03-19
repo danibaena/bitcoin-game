@@ -7,8 +7,7 @@ interface GameState {
   isLoadingPrice: boolean
   makeGuess: (direction: GuessDirection) => void
   guessResolutionCountdown: number | null
-
-  currentGuess: GuessDirection | null
+  isGuessing: boolean
   guessTimestamp: number | null
   guessResolved: boolean
   lastGuessDirection: GuessDirection | null

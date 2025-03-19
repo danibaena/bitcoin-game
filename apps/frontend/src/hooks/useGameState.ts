@@ -5,11 +5,10 @@ import { useEffect, useState } from "react"
 interface GameState {
   score: number
   currentPrice: number | null | undefined
-  previousPrice: number | null
   isLoadingPrice: boolean
   makeGuess: (direction: GuessDirection) => boolean
   guessResolutionCountdown: number | null
-  currentGuess: GuessDirection | null
+  isGuessing: boolean
   guessTimestamp: number | null
   guessResolved: boolean
   lastGuessDirection: GuessDirection | null
@@ -18,45 +17,44 @@ interface GameState {
 
 export const useGameState = (): GameState => {
   const [score, setScore] = useState<number>(0)
-  const { currentPrice, previousPrice, setPreviousPrice, isLoadingPrice, priceHasChanged, resetPriceChanged } = useBitcoinPrice()
+  const { currentPrice, isLoadingPrice } = useBitcoinPrice()
   const { currentGuess, guessTimestamp, makeGuess: setGuess, resetGuess } = useGuess()
-  const { countdown: guessResolutionCountdown, startCountdown, stopCountdown } = useCountdown(null)
+  const { countdown: guessResolutionCountdown, startCountdown, stopCountdown } = useCountdown()
 
+  const [priceAtGuessTime, setPriceAtGuessTime] = useState<number | null>(null)
   const [guessResolved, setGuessResolved] = useState(false)
   const [lastGuessDirection, setLastGuessDirection] = useState<GuessDirection | null>(null)
   const [lastGuessCorrect, setLastGuessCorrect] = useState<boolean | null>(null)
 
   useEffect(() => {
-    if (currentGuess !== null && guessTimestamp !== null && previousPrice !== null && currentPrice !== null && currentPrice !== undefined && priceHasChanged) {
-      const timeElapsed = Date.now() - guessTimestamp
+    if (guessResolutionCountdown === null && currentGuess !== null && guessTimestamp !== null) {
+      const timeElapsed = Date.now() - guessTimestamp >= TOTAL_COUNTDOWN_MILLISECONDS
 
-      if (timeElapsed >= TOTAL_COUNTDOWN_MILLISECONDS) {
-        const isCorrect =
-          (currentGuess === GuessDirection.up && currentPrice > previousPrice) || (currentGuess === GuessDirection.down && currentPrice < previousPrice)
+      if (timeElapsed && currentPrice !== null && currentPrice !== undefined && priceAtGuessTime !== null) {
+        if (currentPrice !== priceAtGuessTime) {
+          const isCorrect =
+            (currentGuess === GuessDirection.up && currentPrice > priceAtGuessTime) || (currentGuess === GuessDirection.down && currentPrice < priceAtGuessTime)
 
-        setScore((prevScore) => prevScore + (isCorrect ? 1 : -1))
+          setScore((prevScore) => prevScore + (isCorrect ? 1 : -1))
 
-        setLastGuessDirection(currentGuess)
-        setLastGuessCorrect(isCorrect)
+          setLastGuessDirection(currentGuess)
+          setLastGuessCorrect(isCorrect)
+          setGuessResolved(true)
 
-        setGuessResolved(true)
-
-        resetGuess()
-        stopCountdown()
-        resetPriceChanged()
+          resetGuess()
+          setPriceAtGuessTime(null)
+          stopCountdown()
+        }
       }
     }
-  }, [currentPrice, previousPrice, currentGuess, guessTimestamp, resetGuess, stopCountdown, priceHasChanged, resetPriceChanged])
+  }, [currentPrice, priceAtGuessTime, currentGuess, guessTimestamp, guessResolutionCountdown, resetGuess, stopCountdown])
 
   const makeGuess = (direction: GuessDirection): boolean => {
     if (currentPrice !== undefined && currentPrice !== null && currentGuess === null) {
       setGuessResolved(false)
-      setPreviousPrice(currentPrice)
-
+      setPriceAtGuessTime(currentPrice)
       startCountdown()
-
       setGuess(direction)
-
       return true
     }
     return false
@@ -65,11 +63,10 @@ export const useGameState = (): GameState => {
   return {
     score,
     currentPrice,
-    previousPrice,
     isLoadingPrice,
     makeGuess,
     guessResolutionCountdown,
-    currentGuess,
+    isGuessing: currentGuess !== null,
     guessTimestamp,
     guessResolved,
     lastGuessDirection,
