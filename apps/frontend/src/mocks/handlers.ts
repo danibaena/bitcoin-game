@@ -1,7 +1,8 @@
+import { API_URL } from "@/hooks"
 import { http, HttpResponse } from "msw"
 
 export const handlers = [
-  http.get("https://api.coingecko.com/api/v3/simple/price", async () => {
+  http.get(API_URL, async () => {
     return HttpResponse.json(
       {
         bitcoin: {
