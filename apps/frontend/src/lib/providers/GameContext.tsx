@@ -1,20 +1,6 @@
-import { GuessDirection, useGameState } from "@/hooks"
+import { useGameState } from "@/hooks"
+import { GameState } from "@/types"
 import { createContext, useContext } from "react"
-
-interface GameState {
-  score: number
-  currentPrice: number | null | undefined
-  isLoadingPrice: boolean
-  makeGuess: (direction: GuessDirection) => void
-  guessResolutionCountdown: number | null
-  isGuessing: boolean
-  comparedPrice: number | null
-  priceAtGuessTime: number | null
-  guessTimestamp: number | null
-  guessResolved: boolean
-  lastGuessDirection: GuessDirection | null
-  isLastGuessCorrect: boolean | null
-}
 
 const GameContext = createContext<GameState | undefined>(undefined)
 

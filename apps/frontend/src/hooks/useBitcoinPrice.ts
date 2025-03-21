@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query"
 
 export const API_URL = "https://api.coingecko.com/api/v3/simple/price"
 
-export type BitcoinPriceData = {
+export type GetBTCPriceAPIResponse = {
   bitcoin: {
     usd: number
   }
@@ -15,7 +15,7 @@ const fetchBitcoinPrice = async (): Promise<number> => {
     if (!response.ok) {
       throw new Error(`API request failed with status ${response.status}`)
     }
-    const data = (await response.json()) as BitcoinPriceData
+    const data = (await response.json()) as GetBTCPriceAPIResponse
 
     return adaptBitcoinPrice(data)
   } catch (error) {
@@ -37,6 +37,6 @@ export const useBitcoinPrice = () => {
   }
 }
 
-const adaptBitcoinPrice = (priceData: BitcoinPriceData): number => {
-  return priceData.bitcoin.usd
+const adaptBitcoinPrice = (getBTCPriceAPIResponse: GetBTCPriceAPIResponse): number => {
+  return getBTCPriceAPIResponse.bitcoin.usd
 }

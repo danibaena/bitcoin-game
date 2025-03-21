@@ -6,7 +6,9 @@ import { cn } from "@/lib/utils"
 import { useEffect, useState } from "react"
 
 export const Game = () => {
-  const { makeGuess, isGuessing } = useGame()
+  const {
+    guess: { makeGuess, isGuessing },
+  } = useGame()
 
   return (
     <div className="flex h-screen flex-row bg-pale">
@@ -44,7 +46,9 @@ export const Game = () => {
 }
 
 const PriceDisplay = () => {
-  const { currentPrice, isLoadingPrice } = useGame()
+  const {
+    price: { currentPrice, isLoadingPrice },
+  } = useGame()
 
   return (
     <div className="flex gap-8 justify-center items-center">
@@ -59,7 +63,10 @@ const PriceDisplay = () => {
 }
 
 const CountdownDisplay = () => {
-  const { guessResolutionCountdown: countdownSeconds, isGuessing } = useGame()
+  const {
+    countdown: { guessResolutionCountdown: countdownSeconds },
+    guess: { isGuessing },
+  } = useGame()
 
   if (!isGuessing || countdownSeconds === null) {
     return
@@ -84,7 +91,10 @@ const ScoreDisplay = () => {
 }
 
 const GuessResultDisplay = () => {
-  const { guessResolved, lastGuessDirection, isLastGuessCorrect, priceAtGuessTime, comparedPrice } = useGame()
+  const {
+    guess: { guessResolved, lastGuessDirection, isLastGuessCorrect },
+    price: { priceAtGuessTime, comparedPrice },
+  } = useGame()
   const [showResult, setShowResult] = useState(false)
 
   useEffect(() => {

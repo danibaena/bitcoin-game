@@ -1,21 +1,7 @@
 import { TOTAL_COUNTDOWN_MILLISECONDS } from "@/constants"
-import { GuessDirection, useBitcoinPrice, useCountdown, useGuess } from "@/hooks"
+import { useBitcoinPrice, useCountdown, useGuess } from "@/hooks"
+import { GameState, GuessDirection } from "@/types"
 import { useEffect, useState } from "react"
-
-interface GameState {
-  score: number
-  currentPrice: number | null | undefined
-  isLoadingPrice: boolean
-  makeGuess: (direction: GuessDirection) => boolean
-  guessResolutionCountdown: number | null
-  isGuessing: boolean
-  comparedPrice: number | null
-  priceAtGuessTime: number | null
-  guessTimestamp: number | null
-  guessResolved: boolean
-  lastGuessDirection: GuessDirection | null
-  isLastGuessCorrect: boolean | null
-}
 
 export const useGameState = (): GameState => {
   const [score, setScore] = useState<number>(0)
@@ -65,16 +51,22 @@ export const useGameState = (): GameState => {
 
   return {
     score,
-    currentPrice,
-    isLoadingPrice,
-    makeGuess,
-    guessResolutionCountdown,
-    isGuessing: currentGuess !== null,
-    comparedPrice,
-    priceAtGuessTime,
-    guessTimestamp,
-    guessResolved,
-    lastGuessDirection,
-    isLastGuessCorrect,
+    price: {
+      currentPrice,
+      isLoadingPrice,
+      comparedPrice,
+      priceAtGuessTime,
+    },
+    guess: {
+      makeGuess,
+      guessResolved,
+      lastGuessDirection,
+      isGuessing: currentGuess !== null,
+      isLastGuessCorrect,
+    },
+    countdown: {
+      guessTimestamp,
+      guessResolutionCountdown,
+    },
   }
 }
