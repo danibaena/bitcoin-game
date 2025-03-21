@@ -9,10 +9,12 @@ interface GameState {
   makeGuess: (direction: GuessDirection) => boolean
   guessResolutionCountdown: number | null
   isGuessing: boolean
+  comparedPrice: number | null
+  priceAtGuessTime: number | null
   guessTimestamp: number | null
   guessResolved: boolean
   lastGuessDirection: GuessDirection | null
-  lastGuessCorrect: boolean | null
+  isLastGuessCorrect: boolean | null
 }
 
 export const useGameState = (): GameState => {
@@ -22,9 +24,10 @@ export const useGameState = (): GameState => {
   const { countdown: guessResolutionCountdown, startCountdown, stopCountdown } = useCountdown()
 
   const [priceAtGuessTime, setPriceAtGuessTime] = useState<number | null>(null)
+  const [comparedPrice, setComparedPrice] = useState<number | null>(null)
   const [guessResolved, setGuessResolved] = useState(false)
   const [lastGuessDirection, setLastGuessDirection] = useState<GuessDirection | null>(null)
-  const [lastGuessCorrect, setLastGuessCorrect] = useState<boolean | null>(null)
+  const [isLastGuessCorrect, setIsLastGuessCorrect] = useState<boolean | null>(null)
 
   useEffect(() => {
     if (guessResolutionCountdown === null && currentGuess !== null && guessTimestamp !== null) {
@@ -37,12 +40,12 @@ export const useGameState = (): GameState => {
 
           setScore((prevScore) => prevScore + (isCorrect ? 1 : -1))
 
+          setComparedPrice(currentPrice)
           setLastGuessDirection(currentGuess)
-          setLastGuessCorrect(isCorrect)
+          setIsLastGuessCorrect(isCorrect)
           setGuessResolved(true)
 
           resetGuess()
-          setPriceAtGuessTime(null)
           stopCountdown()
         }
       }
@@ -67,9 +70,11 @@ export const useGameState = (): GameState => {
     makeGuess,
     guessResolutionCountdown,
     isGuessing: currentGuess !== null,
+    comparedPrice,
+    priceAtGuessTime,
     guessTimestamp,
     guessResolved,
     lastGuessDirection,
-    lastGuessCorrect,
+    isLastGuessCorrect,
   }
 }

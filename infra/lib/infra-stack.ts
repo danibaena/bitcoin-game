@@ -9,7 +9,6 @@ export class BitcoinGameStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props)
 
-    // S3 Bucket
     const bucket = new s3.Bucket(this, "StaticSiteBucket", {
       bucketName: "bitcoin-game",
       websiteIndexDocument: "index.html",
@@ -19,7 +18,6 @@ export class BitcoinGameStack extends cdk.Stack {
       autoDeleteObjects: true,
     })
 
-    // CloudFront Distribution
     const distribution = new cloudfront.Distribution(this, "BitcoinGameCloudFront", {
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(bucket),
@@ -30,7 +28,6 @@ export class BitcoinGameStack extends cdk.Stack {
       defaultRootObject: "index.html",
     })
 
-    // Output CloudFront URL
     new cdk.CfnOutput(this, "CloudFrontURL", {
       value: distribution.domainName,
     })

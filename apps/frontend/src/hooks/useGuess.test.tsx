@@ -36,7 +36,7 @@ describe("useGuess", () => {
     })
 
     expect(secondGuessSuccess).toBe(false)
-    expect(result.current.currentGuess).toBe(GuessDirection.up) // Still the first guess
+    expect(result.current.currentGuess).toBe(GuessDirection.up)
   })
 
   it("should reset the guess state", () => {

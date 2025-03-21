@@ -8,10 +8,12 @@ interface GameState {
   makeGuess: (direction: GuessDirection) => void
   guessResolutionCountdown: number | null
   isGuessing: boolean
+  comparedPrice: number | null
+  priceAtGuessTime: number | null
   guessTimestamp: number | null
   guessResolved: boolean
   lastGuessDirection: GuessDirection | null
-  lastGuessCorrect: boolean | null
+  isLastGuessCorrect: boolean | null
 }
 
 const GameContext = createContext<GameState | undefined>(undefined)

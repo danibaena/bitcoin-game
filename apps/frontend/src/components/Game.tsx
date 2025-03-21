@@ -6,19 +6,18 @@ import { cn } from "@/lib/utils"
 import { useEffect, useState } from "react"
 
 export const Game = () => {
-  const { score, currentPrice, isLoadingPrice, makeGuess, guessResolutionCountdown, isGuessing, guessResolved, lastGuessDirection, lastGuessCorrect } =
-    useGame()
+  const { makeGuess, isGuessing } = useGame()
 
   return (
     <div className="flex h-screen flex-row bg-pale">
       <div className="flex w-full flex-col items-center justify-center m-4">
-        <div className="flex flex-col gap-12 rounded-xl bg-white p-16 sm:w-1/2 h-8/10">
+        <div className="flex flex-col gap-12 rounded-xl bg-white p-16 xl:w-1/2 xl:h-8/10">
           <header className="flex flex-col items-center gap-4 text-center">
             <div className="flex flex-col items-center gap-8 text-center">
               <Logo />
               <h1 className="text-4xl font-bold text-black">Bitcoin Price Guessing</h1>
             </div>
-            <PriceDisplay price={currentPrice} isLoading={isLoadingPrice} />
+            <PriceDisplay />
           </header>
 
           <section className="flex flex-col items-center gap-4 text-center">
@@ -34,9 +33,9 @@ export const Game = () => {
           </section>
 
           <footer className="flex flex-col items-center gap-4 text-center">
-            <ScoreDisplay score={score} />
-            <CountdownDisplay isGuessing={isGuessing} seconds={guessResolutionCountdown} />
-            <GuessResultDisplay guessResolved={guessResolved} isCorrect={lastGuessCorrect} guessDirection={lastGuessDirection} />
+            <ScoreDisplay />
+            <CountdownDisplay />
+            <GuessResultDisplay />
           </footer>
         </div>
       </div>
@@ -44,28 +43,38 @@ export const Game = () => {
   )
 }
 
-const PriceDisplay = ({ price, isLoading }: { price: number | null | undefined; isLoading: boolean }) => {
+const PriceDisplay = () => {
+  const { currentPrice, isLoadingPrice } = useGame()
+
   return (
     <div className="flex gap-8 justify-center items-center">
       <p className="text-black">Current price is:</p>
-      {isLoading || price === undefined || price === null ? <LoadingSpinner /> : <span className="text-orange">${price.toLocaleString()}</span>}
+      {isLoadingPrice || currentPrice === undefined || currentPrice === null ? (
+        <LoadingSpinner />
+      ) : (
+        <span className="text-orange">${currentPrice.toLocaleString()}</span>
+      )}
     </div>
   )
 }
 
-const CountdownDisplay = ({ seconds, isGuessing }: { seconds: number | null; isGuessing: boolean }) => {
-  if (!isGuessing || seconds === null) {
+const CountdownDisplay = () => {
+  const { guessResolutionCountdown: countdownSeconds, isGuessing } = useGame()
+
+  if (!isGuessing || countdownSeconds === null) {
     return
   }
 
   return (
     <div className="flex flex-col gap-2 justify-around items-center">
-      <p>Waiting for guess resolution: {seconds}s</p>
+      <p>Waiting for guess resolution: {countdownSeconds}s</p>
     </div>
   )
 }
 
-const ScoreDisplay = ({ score }: { score: number }) => {
+const ScoreDisplay = () => {
+  const { score } = useGame()
+
   return (
     <>
       <h2 className="text-2xl font-bold text-black">Your score</h2>
@@ -74,15 +83,8 @@ const ScoreDisplay = ({ score }: { score: number }) => {
   )
 }
 
-const GuessResultDisplay = ({
-  guessResolved,
-  isCorrect,
-  guessDirection,
-}: {
-  guessResolved: boolean
-  isCorrect: boolean | null
-  guessDirection: GuessDirection | null
-}) => {
+const GuessResultDisplay = () => {
+  const { guessResolved, lastGuessDirection, isLastGuessCorrect, priceAtGuessTime, comparedPrice } = useGame()
   const [showResult, setShowResult] = useState(false)
 
   useEffect(() => {
@@ -102,12 +104,22 @@ const GuessResultDisplay = ({
   }
 
   return (
-    <div className={cn("mt-4 p-4 rounded-xl text-center", isCorrect ? "bg-green-100" : "bg-red-100")}>
-      <p className="font-bold">
-        {isCorrect ? "Correct guess!" : "Incorrect guess!"}
-        {guessDirection === GuessDirection.up ? " Price went higher 📈" : " Price went lower 📉"}
+    <div className={cn("mt-4 p-4 rounded-xl text-center flex flex-col gap-3", isLastGuessCorrect ? "bg-green-100" : "bg-red-100")}>
+      <p className="font-bold text-lg">
+        {isLastGuessCorrect ? "Correct guess!" : "Incorrect guess!"}
+        {lastGuessDirection === GuessDirection.up ? " Price went higher 📈" : " Price went lower 📉"}
       </p>
-      <p>{isCorrect ? "+1 point" : "-1 point"}</p>
+      <div>
+        <div className="flex gap-8 justify-between items-center">
+          <p className="text-black">Price at guessing:</p>
+          <span className="text-orange">${priceAtGuessTime?.toLocaleString()}</span>
+        </div>
+        <div className="flex gap-8 justify-between items-center">
+          <p className="text-black">Price compared:</p>
+          <span className="text-orange">${comparedPrice?.toLocaleString()}</span>
+        </div>
+      </div>
+      <p className="text-bold text-2xl">{isLastGuessCorrect ? "+1 point" : "-1 point"}</p>
     </div>
   )
 }
