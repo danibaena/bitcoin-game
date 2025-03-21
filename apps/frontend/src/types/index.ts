@@ -1,3 +1,8 @@
+export enum GuessDirection {
+  up = "up",
+  down = "down",
+}
+
 export type GameState = {
   score: number
   price: {
@@ -7,19 +12,13 @@ export type GameState = {
     priceAtGuessTime: number | null
   }
   guess: {
-    makeGuess: (direction: GuessDirection) => boolean
+    makeGuess: (direction: GuessDirection) => void
     isGuessing: boolean
     guessResolved: boolean
     lastGuessDirection: GuessDirection | null
     isLastGuessCorrect: boolean | null
   }
   countdown: {
-    guessTimestamp: number | null
     guessResolutionCountdown: number | null
   }
-}
-
-export enum GuessDirection {
-  up = "up",
-  down = "down",
 }

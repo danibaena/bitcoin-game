@@ -38,15 +38,13 @@ export const useGameState = (): GameState => {
     }
   }, [currentPrice, priceAtGuessTime, currentGuess, guessTimestamp, guessResolutionCountdown, resetGuess, stopCountdown])
 
-  const makeGuess = (direction: GuessDirection): boolean => {
+  const makeGuess = (direction: GuessDirection) => {
     if (currentPrice !== undefined && currentPrice !== null && currentGuess === null) {
       setGuessResolved(false)
       setPriceAtGuessTime(currentPrice)
       startCountdown()
       setGuess(direction)
-      return true
     }
-    return false
   }
 
   return {
@@ -65,7 +63,6 @@ export const useGameState = (): GameState => {
       isLastGuessCorrect,
     },
     countdown: {
-      guessTimestamp,
       guessResolutionCountdown,
     },
   }

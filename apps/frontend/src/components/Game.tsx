@@ -1,8 +1,8 @@
 import { Button, LoadingSpinner, Logo } from "@/components/ui"
 import { SHOW_RESULT_MILLISECONDS } from "@/constants"
-import { GuessDirection } from "@/hooks"
 import { useGame } from "@/lib/providers"
 import { cn } from "@/lib/utils"
+import { GuessDirection } from "@/types"
 import { useEffect, useState } from "react"
 
 export const Game = () => {

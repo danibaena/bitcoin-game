@@ -1,4 +1,5 @@
-import { GuessDirection, useGuess } from "@/hooks/useGuess"
+import { useGuess } from "@/hooks/useGuess"
+import { GuessDirection } from "@/types"
 import { act, renderHook } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 

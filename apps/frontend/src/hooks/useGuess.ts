@@ -1,9 +1,5 @@
+import { GuessDirection } from "@/types"
 import { useState } from "react"
-
-export enum GuessDirection {
-  up = "up",
-  down = "down",
-}
 
 export interface GuessHook {
   currentGuess: GuessDirection | null
