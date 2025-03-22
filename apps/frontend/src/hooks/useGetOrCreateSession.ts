@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query"
 
 export type SessionResponse = {
   sesionId: string
-  score: string
+  score: number
 }
 
 const fetchGetOrCreateSession = async (): Promise<SessionResponse> => {

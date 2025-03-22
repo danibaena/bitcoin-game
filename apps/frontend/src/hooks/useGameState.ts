@@ -1,12 +1,13 @@
 import { TOTAL_COUNTDOWN_MILLISECONDS } from "@/constants"
-import { useBitcoinPrice, useCountdown, useGetOrCreateSession, useGuess } from "@/hooks"
+import { useBitcoinPrice, useCountdown, useGetOrCreateSession, useGuess, useUpdateScore } from "@/hooks"
 import { GameState, GuessDirection } from "@/types"
 import { useEffect, useState } from "react"
 
 export const useGameState = (): GameState => {
-  const [score, setScore] = useState<number>(0)
   const { currentPrice, isLoadingPrice } = useBitcoinPrice()
   const { session, isLoadingSession } = useGetOrCreateSession()
+  const updateScore = useUpdateScore()
+  const [score, setScore] = useState<number>(session?.score ?? 0)
   const { currentGuess, guessTimestamp, makeGuess: setGuess, resetGuess } = useGuess()
   const { countdown: guessResolutionCountdown, startCountdown, stopCountdown } = useCountdown()
 
@@ -25,10 +26,12 @@ export const useGameState = (): GameState => {
           const isCorrect =
             (currentGuess === GuessDirection.up && currentPrice > priceAtGuessTime) || (currentGuess === GuessDirection.down && currentPrice < priceAtGuessTime)
 
+          updateScore(isCorrect)
           setScore((prevScore) => prevScore + (isCorrect ? 1 : -1))
           setIsLastGuessCorrect(isCorrect)
         } else {
           setScore((prevScore) => prevScore - 1)
+          updateScore(false)
           setIsLastGuessCorrect(false)
         }
 
@@ -40,7 +43,7 @@ export const useGameState = (): GameState => {
         stopCountdown()
       }
     }
-  }, [currentPrice, priceAtGuessTime, currentGuess, guessTimestamp, guessResolutionCountdown, resetGuess, stopCountdown])
+  }, [currentPrice, priceAtGuessTime, currentGuess, guessTimestamp, guessResolutionCountdown, resetGuess, stopCountdown, updateScore])
 
   const makeGuess = (direction: GuessDirection) => {
     if (currentPrice !== undefined && currentPrice !== null && currentGuess === null) {
