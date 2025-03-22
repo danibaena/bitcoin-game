@@ -7,9 +7,10 @@ import { act, renderHook, waitFor } from "@testing-library/react"
 import { http, HttpResponse } from "msw"
 import { describe, expect, it } from "vitest"
 
+const currentPrice = 45000.25
 const defaultPrice = {
   comparedPrice: null,
-  currentPrice: 45000,
+  currentPrice: currentPrice,
   isLoadingPrice: false,
   priceAtGuessTime: null,
 }
@@ -27,14 +28,7 @@ describe("useGameState", () => {
   it("should initialize with default values", async () => {
     server.use(
       http.get(API_URL, async () => {
-        return HttpResponse.json(
-          {
-            bitcoin: {
-              usd: 45000,
-            },
-          },
-          { status: 200 },
-        )
+        return HttpResponse.json({ price: currentPrice, source: "api" }, { status: 200 })
       }),
     )
 
@@ -50,14 +44,7 @@ describe("useGameState", () => {
     it("starts the countdown and stores the price at guessing time", async () => {
       server.use(
         http.get(API_URL, async () => {
-          return HttpResponse.json(
-            {
-              bitcoin: {
-                usd: 45000,
-              },
-            },
-            { status: 200 },
-          )
+          return HttpResponse.json({ price: currentPrice, source: "api" }, { status: 200 })
         }),
       )
 
@@ -67,7 +54,7 @@ describe("useGameState", () => {
       act(() => {
         result.current.guess.makeGuess(GuessDirection.up)
       })
-      await waitFor(() => expect(result.current.price).toEqual({ ...defaultPrice, priceAtGuessTime: 45000 }))
+      await waitFor(() => expect(result.current.price).toEqual({ ...defaultPrice, priceAtGuessTime: currentPrice }))
       expect(result.current.countdown.guessResolutionCountdown).toBe(TOTAL_COUNTDOWN_MILLISECONDS / COUNTDOWN_INTERVAL_MILLISECONDS)
       expect(result.current.guess.isGuessing).toBe(true)
       expect(result.current.guess.guessResolved).toBe(false)

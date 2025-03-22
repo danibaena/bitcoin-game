@@ -9,20 +9,13 @@ describe("useBitcoinPrice hook", () => {
     const wrapper = createWrapper()
     server.use(
       http.get(API_URL, async () => {
-        return HttpResponse.json(
-          {
-            bitcoin: {
-              usd: 45000,
-            },
-          },
-          { status: 200 },
-        )
+        return HttpResponse.json({ price: 45000.25, source: "api" }, { status: 200 })
       }),
     )
 
     const { result } = renderHook(() => useBitcoinPrice(), { wrapper })
 
-    await waitFor(() => expect(result.current.currentPrice).toBe(45000))
+    await waitFor(() => expect(result.current.currentPrice).toBe(45000.25))
   })
 
   it("should handle API failure gracefully", async () => {

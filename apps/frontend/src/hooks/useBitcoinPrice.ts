@@ -1,21 +1,20 @@
 import { TOTAL_POLLING_INTERVAL_MILLISECONDS } from "@/constants"
 import { useQuery } from "@tanstack/react-query"
 
-export const API_URL = "https://api.coingecko.com/api/v3/simple/price"
+export const API_URL = "/api/price"
 
-export type GetBTCPriceAPIResponse = {
-  bitcoin: {
-    usd: number
-  }
+export type BitcoinPriceResponse = {
+  price: number
+  source: string
 }
 
 const fetchBitcoinPrice = async (): Promise<number> => {
   try {
-    const response = await fetch(`${API_URL}?ids=bitcoin&vs_currencies=usd`)
+    const response = await fetch(API_URL)
     if (!response.ok) {
       throw new Error(`API request failed with status ${response.status}`)
     }
-    const data = (await response.json()) as GetBTCPriceAPIResponse
+    const data = (await response.json()) as BitcoinPriceResponse
 
     return adaptBitcoinPrice(data)
   } catch (error) {
@@ -37,6 +36,6 @@ export const useBitcoinPrice = () => {
   }
 }
 
-const adaptBitcoinPrice = (getBTCPriceAPIResponse: GetBTCPriceAPIResponse): number => {
-  return getBTCPriceAPIResponse.bitcoin.usd
+const adaptBitcoinPrice = (bitcoinPriceResponse: BitcoinPriceResponse): number => {
+  return bitcoinPriceResponse.price
 }
