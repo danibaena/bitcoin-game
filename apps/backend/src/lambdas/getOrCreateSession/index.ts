@@ -6,7 +6,7 @@ const client = new DynamoDBClient()
 const tableName = process.env.TABLE_NAME!
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-  const cookies = event.headers.Cookie || event.headers.cookie || ""
+  const cookies = event?.headers ? event.headers?.Cookie || event.headers?.cookie || "" : ""
   const sessionMatch = cookies.match(/sessionId=([a-zA-Z0-9-]+)/)
   const sessionId = sessionMatch?.[1]
 
