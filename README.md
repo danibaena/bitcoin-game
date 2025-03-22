@@ -11,6 +11,8 @@
 - Players can only make one guess at a time
 - New players start with a score of 0
 
+## Architecture
+
 ## How to run locally
 
 ### Prerequisites
@@ -37,18 +39,8 @@ AWS. Right now the deployment flow includes:
 - Infrastructure deployment to AWS. This includes S3 bucket, Cloudfront distribution, etc.
 - Frontend app deployment. The job creates a new build of the app and uploads it to the S3 bucket.
 
-## Useful tooling
+## Useful commands
 
-### Test
-
-`npm test`
-
-If you want to run tests for an specific workspace you can do:
-
-`npm run test --workspace apps/frontend`
-
-### Format
-
-You can apply prettier to the whole project by running
-
-`npx prettier --write .`
+- `npm test` run tests for all workspaces
+- `npm run test --workspace <WORKSPACE>` run tests for especific `<WORKSPACE>`
+- `npx prettier --write .` format the whole project
