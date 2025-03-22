@@ -6,6 +6,7 @@ import * as dynamodb from "aws-cdk-lib/aws-dynamodb"
 import * as lambda from "aws-cdk-lib/aws-lambda"
 import * as s3 from "aws-cdk-lib/aws-s3"
 import { Construct } from "constructs"
+import * as path from "path"
 
 export class BitcoinGameStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -40,14 +41,14 @@ export class BitcoinGameStack extends cdk.Stack {
     const getBitcoinPriceLambda = new lambda.Function(this, "GetBitcoinPriceLambda", {
       runtime: lambda.Runtime.NODEJS_22_X,
       handler: "index.handler",
-      code: lambda.Code.fromAsset("../../apps/backend/src/lambdas/getBitcoinPrice"),
+      code: lambda.Code.fromAsset(path.join(__dirname, "../../apps/backend/src/lambdas/getBitcoinPrice")),
       environment: {},
     })
 
     const getOrCreateSessionLambda = new lambda.Function(this, "GetOrCreateSessionLambda", {
       runtime: lambda.Runtime.NODEJS_22_X,
       handler: "index.handler",
-      code: lambda.Code.fromAsset("../../apps/backend/src/lambdas/getOrCreateSession"),
+      code: lambda.Code.fromAsset(path.join(__dirname, "../../apps/backend/src/lambdas/getOrCreateSession")),
       environment: {
         TABLE_NAME: playersTable.tableName,
       },
@@ -56,7 +57,7 @@ export class BitcoinGameStack extends cdk.Stack {
     const updateScoreLambda = new lambda.Function(this, "UpdateScoreLambda", {
       runtime: lambda.Runtime.NODEJS_22_X,
       handler: "index.handler",
-      code: lambda.Code.fromAsset("../../apps/backend/src/lambdas/updateScore"),
+      code: lambda.Code.fromAsset(path.join(__dirname, "../../apps/backend/src/lambdas/updateScore")),
       environment: {
         TABLE_NAME: playersTable.tableName,
       },
