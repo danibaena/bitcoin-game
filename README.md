@@ -13,6 +13,8 @@
 
 ## Architecture
 
+![Bitcoin Game Architecture](resources/bitcoin-game-architecture.drawio.png)
+
 ## How to run locally
 
 ### Prerequisites
