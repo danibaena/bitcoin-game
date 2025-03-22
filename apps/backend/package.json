@@ -7,7 +7,9 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "vitest",
+    "ci:test": "vitest run"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.772.0",
@@ -17,6 +19,8 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.147",
     "@types/node": "^22.13.11",
-    "typescript": "~5.7.2"
+    "msw": "^2.7.3",
+    "typescript": "~5.7.2",
+    "vitest": "^3.0.9"
   }
 }

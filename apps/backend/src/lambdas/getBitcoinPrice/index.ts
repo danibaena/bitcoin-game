@@ -1,13 +1,14 @@
-import { APIGatewayProxyHandler } from "aws-lambda"
+import { APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"
 import fetch from "node-fetch"
+
+const API_URL = "https://api.coincap.io/v2/assets/bitcoin"
+const PRICE_TTL = 20
 
 // In-memory cache
 let lastPrice: number | null = null
 let lastUpdated: number | null = null
 
-const PRICE_TTL = 20
-
-type CryptoApiResponse = {
+type CoinCapBitcoinPriceResponse = {
   data: {
     id: string
     rank: string
@@ -25,26 +26,26 @@ type CryptoApiResponse = {
   timestamp: number
 }
 
-type GetBitcoinPriceResponse = {
-  price: string
+type BitcoinPriceResponse = {
+  price: number
   source: string
 }
 
-export const handler: APIGatewayProxyHandler = async () => {
+export const handler: APIGatewayProxyHandler = async (): Promise<APIGatewayProxyResult> => {
   const now = Math.floor(Date.now() / 1000)
 
   if (lastPrice !== null && lastUpdated !== null && now - lastUpdated < PRICE_TTL) {
-    return jsonResponse({ price: lastPrice.toFixed(2), source: "cache" })
+    return jsonResponse({ price: roundToTwoDecimals(lastPrice), source: "cache" })
   }
 
   try {
-    const res = await fetch("https://api.coincap.io/v2/assets/bitcoin")
+    const res = await fetch(API_URL)
 
     if (!res.ok) {
       throw new Error(`CoinCap API responded with status ${res.status}`)
     }
 
-    const data = (await res.json()) as CryptoApiResponse
+    const data = (await res.json()) as CoinCapBitcoinPriceResponse
     const priceUsd = parseFloat(data.data?.priceUsd)
 
     if (isNaN(priceUsd)) {
@@ -54,7 +55,7 @@ export const handler: APIGatewayProxyHandler = async () => {
     lastPrice = priceUsd
     lastUpdated = now
 
-    return jsonResponse({ price: priceUsd.toFixed(2), source: "coincap" })
+    return jsonResponse({ price: roundToTwoDecimals(priceUsd), source: "coincap" })
   } catch (err) {
     console.error("Error fetching Bitcoin price:", err)
     return {
@@ -65,10 +66,14 @@ export const handler: APIGatewayProxyHandler = async () => {
   }
 }
 
-function jsonResponse(body: GetBitcoinPriceResponse) {
+function jsonResponse(body: BitcoinPriceResponse) {
   return {
     statusCode: 200,
     body: JSON.stringify(body),
     headers: { "Content-Type": "application/json" },
   }
+}
+
+function roundToTwoDecimals(value: number): number {
+  return Math.round(value * 100) / 100
 }
