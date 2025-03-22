@@ -25,15 +25,18 @@ export const useGameState = (): GameState => {
             (currentGuess === GuessDirection.up && currentPrice > priceAtGuessTime) || (currentGuess === GuessDirection.down && currentPrice < priceAtGuessTime)
 
           setScore((prevScore) => prevScore + (isCorrect ? 1 : -1))
-
-          setComparedPrice(currentPrice)
-          setLastGuessDirection(currentGuess)
           setIsLastGuessCorrect(isCorrect)
-          setGuessResolved(true)
-
-          resetGuess()
-          stopCountdown()
+        } else {
+          setScore((prevScore) => prevScore - 1)
+          setIsLastGuessCorrect(false)
         }
+
+        setComparedPrice(currentPrice)
+        setLastGuessDirection(currentGuess)
+        setGuessResolved(true)
+
+        resetGuess()
+        stopCountdown()
       }
     }
   }, [currentPrice, priceAtGuessTime, currentGuess, guessTimestamp, guessResolutionCountdown, resetGuess, stopCountdown])

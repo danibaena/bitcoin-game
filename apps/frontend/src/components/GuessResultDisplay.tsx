@@ -10,6 +10,7 @@ export const GuessResultDisplay = () => {
     price: { priceAtGuessTime, comparedPrice },
   } = useGame()
   const [showResult, setShowResult] = useState(false)
+  const isPriceUnchanged = priceAtGuessTime === comparedPrice
 
   useEffect(() => {
     if (guessResolved) {
@@ -31,7 +32,7 @@ export const GuessResultDisplay = () => {
     <div className={cn("mt-4 flex flex-col gap-3 rounded-xl p-4 text-center", isLastGuessCorrect ? "bg-green-100" : "bg-red-100")}>
       <p className="text-lg font-bold">
         {isLastGuessCorrect ? "Correct guess!" : "Incorrect guess!"}
-        {lastGuessDirection === GuessDirection.up ? " Price went higher 📈" : " Price went lower 📉"}
+        {isPriceUnchanged ? " Price remained the same 🟰" : lastGuessDirection === GuessDirection.up ? " Price went higher 📈" : " Price went lower 📉"}
       </p>
       <div>
         <div className="flex items-center justify-between gap-8">
