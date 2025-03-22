@@ -19,8 +19,11 @@ describe("GuessButtons", () => {
     vi.clearAllMocks()
   })
 
-  it("renders up and down buttons", () => {
+  it("shows both buttons to make guesses", () => {
     vi.mocked(useGame).mockReturnValue({
+      score: {
+        isLoadingSession: false,
+      },
       guess: {
         makeGuess: mockMakeGuess,
         isGuessing: false,
@@ -33,8 +36,11 @@ describe("GuessButtons", () => {
     expect(screen.getByText(/Price will go higher/i)).toBeDefined()
   })
 
-  it("calls makeGuess with DOWN direction when lower button is clicked", () => {
+  it("makes the guess when the lower button is clicked", () => {
     vi.mocked(useGame).mockReturnValue({
+      score: {
+        isLoadingSession: false,
+      },
       guess: {
         makeGuess: mockMakeGuess,
         isGuessing: false,
@@ -48,8 +54,11 @@ describe("GuessButtons", () => {
     expect(mockMakeGuess).toHaveBeenCalledWith(GuessDirection.down)
   })
 
-  it("calls makeGuess with UP direction when higher button is clicked", () => {
+  it("makes the guess when the higher button is clicked", () => {
     vi.mocked(useGame).mockReturnValue({
+      score: {
+        isLoadingSession: false,
+      },
       guess: {
         makeGuess: mockMakeGuess,
         isGuessing: false,
@@ -63,11 +72,34 @@ describe("GuessButtons", () => {
     expect(mockMakeGuess).toHaveBeenCalledWith(GuessDirection.up)
   })
 
-  it("disables buttons when isGuessing is true", () => {
+  it("disables buttons when is guessing", () => {
     vi.mocked(useGame).mockReturnValue({
+      score: {
+        isLoadingSession: false,
+      },
       guess: {
         makeGuess: mockMakeGuess,
         isGuessing: true,
+      },
+    } as never)
+
+    renderWithProviders(<GuessButtons />)
+
+    const lowerButton = screen.getByText(/Price will go lower/i).closest("button")
+    const higherButton = screen.getByText(/Price will go higher/i).closest("button")
+
+    expect(lowerButton?.disabled).toBe(true)
+    expect(higherButton?.disabled).toBe(true)
+  })
+
+  it("disables buttons when is loading session", () => {
+    vi.mocked(useGame).mockReturnValue({
+      score: {
+        isLoadingSession: true,
+      },
+      guess: {
+        makeGuess: mockMakeGuess,
+        isGuessing: false,
       },
     } as never)
 

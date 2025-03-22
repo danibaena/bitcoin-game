@@ -1,4 +1,5 @@
-import { API_URL, useBitcoinPrice } from "@/hooks/useBitcoinPrice"
+import { API_URL } from "@/constants"
+import { useBitcoinPrice } from "@/hooks/useBitcoinPrice"
 import { server } from "@/mocks/node"
 import { createWrapper } from "@/mocks/utils"
 import { renderHook, waitFor } from "@testing-library/react"
@@ -8,7 +9,7 @@ describe("useBitcoinPrice hook", () => {
   it("should return the fetched Bitcoin price", async () => {
     const wrapper = createWrapper()
     server.use(
-      http.get(API_URL, async () => {
+      http.get(`${API_URL}/price`, async () => {
         return HttpResponse.json({ price: 45000.25, source: "api" }, { status: 200 })
       }),
     )
@@ -21,7 +22,7 @@ describe("useBitcoinPrice hook", () => {
   it("should handle API failure gracefully", async () => {
     const wrapper = createWrapper()
     server.use(
-      http.get(API_URL, async () => {
+      http.get(`${API_URL}/price`, async () => {
         return new HttpResponse(null, { status: 500 })
       }),
     )

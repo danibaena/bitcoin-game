@@ -12,9 +12,20 @@ vi.mock(import("@/lib/providers"), async (importOriginal) => {
 })
 
 describe("ScoreDisplay", () => {
+  it("displays the loading spinner when loading session", () => {
+    vi.mocked(useGame).mockReturnValue({
+      score: { score: 0, isLoadingSession: true },
+    } as never)
+
+    renderWithProviders(<ScoreDisplay />)
+
+    expect(screen.getByText("Your score")).toBeDefined()
+    expect(screen.getByTestId("loading-spinner")).toBeDefined()
+  })
+
   it("displays the score from context", () => {
     vi.mocked(useGame).mockReturnValue({
-      score: 5,
+      score: { score: 5, isLoadingSession: false },
     } as never)
 
     renderWithProviders(<ScoreDisplay />)
@@ -25,14 +36,14 @@ describe("ScoreDisplay", () => {
 
   it("updates when score changes", () => {
     vi.mocked(useGame).mockReturnValue({
-      score: 0,
+      score: { score: 0, isLoadingSession: false },
     } as never)
 
     const { rerender } = renderWithProviders(<ScoreDisplay />)
     expect(screen.getByText("0")).toBeDefined()
 
     vi.mocked(useGame).mockReturnValue({
-      score: 10,
+      score: { score: 10, isLoadingSession: false },
     } as never)
 
     rerender(<ScoreDisplay />)
@@ -41,7 +52,7 @@ describe("ScoreDisplay", () => {
 
   it("handles negative scores", () => {
     vi.mocked(useGame).mockReturnValue({
-      score: -3,
+      score: { score: -3, isLoadingSession: false },
     } as never)
 
     renderWithProviders(<ScoreDisplay />)

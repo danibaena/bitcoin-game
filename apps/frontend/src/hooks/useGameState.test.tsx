@@ -1,5 +1,5 @@
-import { COUNTDOWN_INTERVAL_MILLISECONDS, TOTAL_COUNTDOWN_MILLISECONDS } from "@/constants"
-import { API_URL, useGameState } from "@/hooks"
+import { API_URL, COUNTDOWN_INTERVAL_MILLISECONDS, TOTAL_COUNTDOWN_MILLISECONDS } from "@/constants"
+import { useGameState } from "@/hooks"
 import { server } from "@/mocks/node"
 import { createWrapper } from "@/mocks/utils"
 import { GuessDirection } from "@/types"
@@ -8,6 +8,10 @@ import { http, HttpResponse } from "msw"
 import { describe, expect, it } from "vitest"
 
 const currentPrice = 45000.25
+const defaultScore = {
+  score: 0,
+  isLoadingSession: true,
+}
 const defaultPrice = {
   comparedPrice: null,
   currentPrice: currentPrice,
@@ -27,7 +31,7 @@ const defaultGuess = {
 describe("useGameState", () => {
   it("should initialize with default values", async () => {
     server.use(
-      http.get(API_URL, async () => {
+      http.get(`${API_URL}/price`, async () => {
         return HttpResponse.json({ price: currentPrice, source: "api" }, { status: 200 })
       }),
     )
@@ -35,7 +39,7 @@ describe("useGameState", () => {
     const { result } = renderHook(() => useGameState(), { wrapper: createWrapper() })
 
     await waitFor(() => expect(result.current.price).toEqual(defaultPrice))
-    expect(result.current.score).toBe(0)
+    expect(result.current.score).toEqual(defaultScore)
     expect(result.current.countdown).toEqual(defaultCountdown)
     expect(result.current.guess).toMatchObject(defaultGuess)
   })
@@ -43,7 +47,7 @@ describe("useGameState", () => {
   describe("when making a guess", () => {
     it("starts the countdown and stores the price at guessing time", async () => {
       server.use(
-        http.get(API_URL, async () => {
+        http.get(`${API_URL}/price`, async () => {
           return HttpResponse.json({ price: currentPrice, source: "api" }, { status: 200 })
         }),
       )

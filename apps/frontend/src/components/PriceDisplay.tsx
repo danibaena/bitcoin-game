@@ -7,7 +7,7 @@ export const PriceDisplay = () => {
   } = useGame()
 
   return (
-    <div className="flex items-center justify-center gap-8">
+    <div className="flex flex-col items-center justify-center gap-2">
       <p className="text-black">Current price is:</p>
       {isLoadingPrice || currentPrice === undefined || currentPrice === null ? (
         <LoadingSpinner />

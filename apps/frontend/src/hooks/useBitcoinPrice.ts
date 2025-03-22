@@ -1,7 +1,5 @@
-import { TOTAL_POLLING_INTERVAL_MILLISECONDS } from "@/constants"
+import { API_URL, TOTAL_POLLING_INTERVAL_MILLISECONDS } from "@/constants"
 import { useQuery } from "@tanstack/react-query"
-
-export const API_URL = "/api/price"
 
 export type BitcoinPriceResponse = {
   price: number
@@ -10,7 +8,7 @@ export type BitcoinPriceResponse = {
 
 const fetchBitcoinPrice = async (): Promise<number> => {
   try {
-    const response = await fetch(API_URL)
+    const response = await fetch(`${API_URL}/price`)
     if (!response.ok) {
       throw new Error(`API request failed with status ${response.status}`)
     }

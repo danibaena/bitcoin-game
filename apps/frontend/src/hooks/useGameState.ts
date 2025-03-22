@@ -1,11 +1,12 @@
 import { TOTAL_COUNTDOWN_MILLISECONDS } from "@/constants"
-import { useBitcoinPrice, useCountdown, useGuess } from "@/hooks"
+import { useBitcoinPrice, useCountdown, useGetOrCreateSession, useGuess } from "@/hooks"
 import { GameState, GuessDirection } from "@/types"
 import { useEffect, useState } from "react"
 
 export const useGameState = (): GameState => {
   const [score, setScore] = useState<number>(0)
   const { currentPrice, isLoadingPrice } = useBitcoinPrice()
+  const { session, isLoadingSession } = useGetOrCreateSession()
   const { currentGuess, guessTimestamp, makeGuess: setGuess, resetGuess } = useGuess()
   const { countdown: guessResolutionCountdown, startCountdown, stopCountdown } = useCountdown()
 
@@ -51,7 +52,10 @@ export const useGameState = (): GameState => {
   }
 
   return {
-    score,
+    score: {
+      score,
+      isLoadingSession,
+    },
     price: {
       currentPrice,
       isLoadingPrice,

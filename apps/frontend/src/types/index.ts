@@ -4,7 +4,10 @@ export enum GuessDirection {
 }
 
 export type GameState = {
-  score: number
+  score: {
+    score: number
+    isLoadingSession: boolean
+  }
   price: {
     currentPrice?: number | null
     isLoadingPrice: boolean
