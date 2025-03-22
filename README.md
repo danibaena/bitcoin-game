@@ -10,3 +10,45 @@
   loses 1 point.
 - Players can only make one guess at a time
 - New players start with a score of 0
+
+## How to run locally
+
+### Prerequisites
+
+#### Node version
+
+This project uses [NVM](https://github.com/nvm-sh/nvm) (Node version manager) to automatically use **node version 22.14.0**.
+
+#### Installing dependencies
+
+`npm install`
+
+### Running dev server
+
+`npm run dev`
+
+It will start a dev server with the frontend app using a mock server for the requests.
+
+## Deployments
+
+This app uses a Continuous Deployment workflow leveraging Github Actions. In every commit pushed to the repository, the Github Actions will run a deployment to
+AWS. Right now the deployment flow includes:
+
+- Infrastructure deployment to AWS. This includes S3 bucket, Cloudfront distribution, etc.
+- Frontend app deployment. The job creates a new build of the app and uploads it to the S3 bucket.
+
+## Useful tooling
+
+### Test
+
+`npm test`
+
+If you want to run tests for an specific workspace you can do:
+
+`npm run test --workspace apps/frontend`
+
+### Format
+
+You can apply prettier to the whole project by running
+
+`npx prettier --write .`
