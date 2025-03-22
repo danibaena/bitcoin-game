@@ -1,0 +1,30 @@
+# Node.js
+node_modules/
+package-lock.json
+
+# TypeScript output
+**/*.js
+**/*.js.map
+**/*.d.ts
+**/*.d.ts.map
+**/*.tsbuildinfo
+
+# Build folders
+dist/
+build/
+
+# Lambda ZIPs or temporary packages
+*.zip
+.cdk.staging/
+
+# Env / credentials
+.env
+.env.*
+
+# IDE/editor
+.vscode/
+.idea/
+.DS_Store
+
+# Tests / coverage
+coverage/

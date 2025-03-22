@@ -1,15 +1,11 @@
 {
-  "name": "bitcoin-game",
+  "name": "bitcoin-game-app",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "description": "Web application game for Bitcoin Price Guessing based on real-time data.",
   "author": "Daniel Baena",
   "license": "MIT",
-  "workspaces": [
-    "apps/*",
-    "infra"
-  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -34,7 +30,7 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
-    "@types/node": "^22.13.10",
+    "@types/node": "^22.13.11",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",

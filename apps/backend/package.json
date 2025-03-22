@@ -1,0 +1,22 @@
+{
+  "author": "Daniel Baena",
+  "description": "AWS Lambdas Bitcoin app Price Guessing based on external service data.",
+  "keywords": [],
+  "license": "MIT",
+  "name": "bitcoin-game-lambdas",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.772.0",
+    "node-fetch": "^3.3.2",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.147",
+    "@types/node": "^22.13.11",
+    "typescript": "~5.7.2"
+  }
+}
