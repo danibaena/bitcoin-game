@@ -2,7 +2,7 @@ import { APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda"
 import fetch from "node-fetch"
 
 const API_URL = "https://api.coincap.io/v2/assets/bitcoin"
-const PRICE_TTL = 20
+const PRICE_TTL_SECONDS = 20
 
 // In-memory cache
 let lastPrice: number | null = null
@@ -34,7 +34,7 @@ type BitcoinPriceResponse = {
 export const handler: APIGatewayProxyHandler = async (): Promise<APIGatewayProxyResult> => {
   const now = Math.floor(Date.now() / 1000)
 
-  if (lastPrice !== null && lastUpdated !== null && now - lastUpdated < PRICE_TTL) {
+  if (lastPrice !== null && lastUpdated !== null && now - lastUpdated < PRICE_TTL_SECONDS) {
     return jsonResponse({ price: roundToTwoDecimals(lastPrice), source: "cache" })
   }
 
