@@ -18,5 +18,9 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    onConsoleLog(_, type) {
+      if (type === "stderr") return false
+      return true
+    },
   },
 })
