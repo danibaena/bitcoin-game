@@ -73,15 +73,17 @@ export class BitcoinGameStack extends cdk.Stack {
       },
     })
 
-    api.root.addResource("price").addMethod("GET", new apigateway.LambdaIntegration(getBitcoinPriceLambda), {
+    const apiResource = api.root.addResource("api")
+
+    apiResource.addResource("price").addMethod("GET", new apigateway.LambdaIntegration(getBitcoinPriceLambda), {
       methodResponses: [{ statusCode: "200" }],
     })
 
-    api.root.addResource("session").addMethod("GET", new apigateway.LambdaIntegration(getOrCreateSessionLambda), {
+    apiResource.addResource("session").addMethod("GET", new apigateway.LambdaIntegration(getOrCreateSessionLambda), {
       methodResponses: [{ statusCode: "200" }],
     })
 
-    api.root.addResource("score").addMethod("POST", new apigateway.LambdaIntegration(updateScoreLambda), {
+    apiResource.addResource("score").addMethod("POST", new apigateway.LambdaIntegration(updateScoreLambda), {
       methodResponses: [{ statusCode: "200" }],
     })
 
