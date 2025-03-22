@@ -7,19 +7,18 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "test": "vitest",
     "ci:test": "vitest run"
   },
-  "dependencies": {
+  "devDependencies": {
     "@aws-sdk/client-dynamodb": "^3.772.0",
     "node-fetch": "^3.3.2",
-    "uuid": "^11.1.0"
-  },
-  "devDependencies": {
+    "uuid": "^11.1.0",
     "@types/aws-lambda": "^8.10.147",
     "@types/node": "^22.13.11",
     "msw": "^2.7.3",
+    "tsup": "^8.4.0",
     "typescript": "~5.7.2",
     "vitest": "^3.0.9"
   }
