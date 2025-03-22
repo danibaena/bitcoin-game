@@ -34,7 +34,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
   const newSessionId = uuidv4()
   const now = Math.floor(Date.now() / 1000)
-  const ttlSeconds = 60 * 60 * 24 * 2
+  const ttlSeconds = 60 * 60 * 24
   const expiresAt = now + ttlSeconds
 
   await client.send(
@@ -50,7 +50,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
   const headers: { [key: string]: string } = {
     "Content-Type": "application/json",
-    "Set-Cookie": `sessionId=${newSessionId}; HttpOnly; Path=/; Max-Age=86400; SameSite=Lax`,
+    "Set-Cookie": `sessionId=${newSessionId}; HttpOnly; Path=/; Max-Age=${ttlSeconds}; SameSite=Lax`,
   }
 
   return {
