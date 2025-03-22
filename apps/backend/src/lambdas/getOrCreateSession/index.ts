@@ -50,7 +50,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
   const headers: { [key: string]: string } = {
     "Content-Type": "application/json",
-    "Set-Cookie": `sessionId=${newSessionId}; HttpOnly; Path=/; Max-Age=2592000; SameSite=Lax`,
+    "Set-Cookie": `sessionId=${newSessionId}; HttpOnly; Path=/; Max-Age=86400; SameSite=Lax`,
   }
 
   return {
