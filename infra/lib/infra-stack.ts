@@ -41,14 +41,14 @@ export class BitcoinGameStack extends cdk.Stack {
     const getBitcoinPriceLambda = new lambda.Function(this, "GetBitcoinPriceLambda", {
       runtime: lambda.Runtime.NODEJS_22_X,
       handler: "index.handler",
-      code: lambda.Code.fromAsset(path.join(__dirname, "../../apps/backend/dist/getBitcoinPrice/index.js")),
+      code: lambda.Code.fromAsset(path.join(__dirname, "../../apps/backend/dist/getBitcoinPrice")),
       environment: {},
     })
 
     const getOrCreateSessionLambda = new lambda.Function(this, "GetOrCreateSessionLambda", {
       runtime: lambda.Runtime.NODEJS_22_X,
       handler: "index.handler",
-      code: lambda.Code.fromAsset(path.join(__dirname, "../../apps/backend/dist/getOrCreateSession/index.js")),
+      code: lambda.Code.fromAsset(path.join(__dirname, "../../apps/backend/dist/getOrCreateSession")),
       environment: {
         TABLE_NAME: playersTable.tableName,
       },
@@ -57,7 +57,7 @@ export class BitcoinGameStack extends cdk.Stack {
     const updateScoreLambda = new lambda.Function(this, "UpdateScoreLambda", {
       runtime: lambda.Runtime.NODEJS_22_X,
       handler: "index.handler",
-      code: lambda.Code.fromAsset(path.join(__dirname, "../../apps/backend/dist/updateScore/index.js")),
+      code: lambda.Code.fromAsset(path.join(__dirname, "../../apps/backend/dist/updateScore")),
       environment: {
         TABLE_NAME: playersTable.tableName,
       },
