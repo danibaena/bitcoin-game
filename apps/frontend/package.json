@@ -44,6 +44,8 @@
     "globals": "^15.15.0",
     "jsdom": "^26.0.0",
     "msw": "^2.7.3",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4.0.14",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
