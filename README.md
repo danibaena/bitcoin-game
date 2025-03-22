@@ -39,6 +39,10 @@ AWS. Right now the deployment flow includes:
 - Infrastructure deployment to AWS. This includes S3 bucket, Cloudfront distribution, etc.
 - Frontend app deployment. The job creates a new build of the app and uploads it to the S3 bucket.
 
+If you want to deploy on your AWS account you just need to fork this repo and add the following secrets for your github actions to work
+
+![GitHub Action Secrets](resources/github-action-secrets.png)
+
 ## Useful commands
 
 - `npm test` run tests for all workspaces

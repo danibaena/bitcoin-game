@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Web application game for Bitcoin Price Guessing based on real-time data.",
+  "description": "Web application game for Bitcoin Price Guessing based on third party data.",
   "author": "Daniel Baena",
   "license": "MIT",
   "scripts": {

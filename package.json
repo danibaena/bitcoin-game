@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Monorepo package containing the frontend, backend and infra for Bitcoin Price Guessing based on real-time data.",
+  "description": "Monorepo package containing the frontend, backend and infra for Bitcoin Price Guessing based on third party API data.",
   "author": "Daniel Baena",
   "license": "MIT",
   "workspaces": [
