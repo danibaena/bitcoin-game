@@ -50,6 +50,6 @@ This is a basic breakdown with the more relevant files/folders and its descripti
 
 ## Useful commands
 
-- `npm test` Run tests
-- `npm run build` Build the app
-- `npm run dev` Start dev server, the http requests to API will be mocked with MSW
+- `npm test` - Run tests
+- `npm run build` - Build the app
+- `npm run dev` - Start dev server, the http requests to API will be mocked with MSW
