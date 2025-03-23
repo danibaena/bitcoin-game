@@ -87,6 +87,19 @@ export class BitcoinGameStack extends cdk.Stack {
       methodResponses: [{ statusCode: "200" }],
     })
 
+    const apiResponseHeadersPolicy = new cloudfront.ResponseHeadersPolicy(this, "ApiResponseHeadersPolicy", {
+      responseHeadersPolicyName: "ApiResponseHeadersPolicy",
+      customHeadersBehavior: {
+        customHeaders: [
+          {
+            header: "Set-Cookie",
+            override: true,
+            value: "*",
+          },
+        ],
+      },
+    })
+
     distribution.addBehavior(
       "/api/*",
       new origins.HttpOrigin(`${api.restApiId}.execute-api.${this.region}.amazonaws.com`, {
@@ -95,6 +108,12 @@ export class BitcoinGameStack extends cdk.Stack {
       {
         allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
         cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+        originRequestPolicy: new cloudfront.OriginRequestPolicy(this, "ApiOriginRequestPolicy", {
+          cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(),
+          headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(),
+          queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
+        }),
+        responseHeadersPolicy: apiResponseHeadersPolicy,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
     )
