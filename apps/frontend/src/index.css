@@ -144,6 +144,6 @@
   --color-red: #c35354;
 }
 
-.bounce-three-times {
+.bounce-twice {
   animation-iteration-count: 2.5;
 }
