@@ -7,7 +7,7 @@ export const useGameState = (): GameState => {
   const { currentPrice, isLoadingPrice } = useBitcoinPrice()
   const { session, isLoadingSession } = useGetOrCreateSession()
   const updateScore = useUpdateScore()
-  const [score, setScore] = useState<number>(session?.score ?? 0)
+  const [score, setScore] = useState<number>(0)
   const { currentGuess, guessTimestamp, makeGuess: setGuess, resetGuess } = useGuess()
   const { countdown: guessResolutionCountdown, startCountdown, stopCountdown } = useCountdown()
 
@@ -16,6 +16,12 @@ export const useGameState = (): GameState => {
   const [guessResolved, setGuessResolved] = useState(false)
   const [lastGuessDirection, setLastGuessDirection] = useState<GuessDirection | null>(null)
   const [isLastGuessCorrect, setIsLastGuessCorrect] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    if (session) {
+      setScore(session.score)
+    }
+  }, [session])
 
   useEffect(() => {
     if (guessResolutionCountdown === null && currentGuess !== null && guessTimestamp !== null) {
