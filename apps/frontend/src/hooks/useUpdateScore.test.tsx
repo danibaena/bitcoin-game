@@ -12,7 +12,7 @@ describe("useUpdateScore hook", () => {
     server.use(
       http.post(`${API_URL}/score`, async ({ request }) => {
         const body = await request.json()
-        expect(body).toEqual({ isCorrect: true })
+        expect(body).toEqual({ correct: true })
 
         return HttpResponse.json({ success: true }, { status: 200 })
       }),

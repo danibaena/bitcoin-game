@@ -8,9 +8,7 @@ export const useUpdateScore = () => {
     mutationFn: async (isCorrect: boolean) => {
       const response = await fetch(`${API_URL}/score`, {
         method: "POST",
-        body: JSON.stringify({
-          isCorrect,
-        }),
+        body: JSON.stringify(portUpdateScoreDTO(isCorrect)),
       })
       return response
     },
@@ -18,4 +16,14 @@ export const useUpdateScore = () => {
       return queryClient.invalidateQueries({ queryKey: ["getOrCreateSession"] })
     },
   }).mutateAsync
+}
+
+type UpdateScoreDTO = {
+  correct: boolean
+}
+
+const portUpdateScoreDTO = (isCorrect: boolean): UpdateScoreDTO => {
+  return {
+    correct: isCorrect,
+  }
 }
