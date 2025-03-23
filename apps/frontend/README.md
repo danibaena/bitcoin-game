@@ -13,8 +13,19 @@ Other technologies used:
 
 ## Decisions
 
-This project follows the [colocation principle](https://kentcdodds.com/blog/colocation) by putting related code/styles/tests closer to their implementation.
-Also another decision made has been using barrel exports. Due to the size of the project its benefits for code maintainability
+- This project follows the [colocation principle](https://kentcdodds.com/blog/colocation), keeping related code, styles, and tests close to their implementation
+  for better maintainability and developer experience.
+
+- Barrel exports are used to simplify and centralize module imports. Given the size of the project, the maintainability benefits outweigh the potential
+  trade-offs.
+
+- The app uses polling for the price API. Since guesses are resolved every 60 seconds, implementing a real-time API was deemed unnecessary at this stage—though
+  it’s certainly something that could be added in the future.
+
+- The game logic is managed through a single React context: This approach allows presentational components to access only the data they need, while also making
+  the logic easier to test. The trade-off here is that, although some logic has been split into smaller custom hooks, the `useGameState` hook remains quite
+  large, which may affect maintainability. A possible improvement would be to move most of the game logic to the backend, keeping the frontend as "dumb" as
+  possible.
 
 ## Folder structure
 

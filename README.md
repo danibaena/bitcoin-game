@@ -21,7 +21,7 @@
 
 #### Node version
 
-This project uses [NVM](https://github.com/nvm-sh/nvm) (Node version manager) to automatically use **node version 22.14.0**.
+This project uses [NVM](https://github.com/nvm-sh/nvm) (Node Version Manager) to automatically use **Node.js version 22.14.0**.
 
 #### Installing dependencies
 
@@ -31,17 +31,17 @@ This project uses [NVM](https://github.com/nvm-sh/nvm) (Node version manager) to
 
 `npm run dev`
 
-It will start a dev server with the frontend app using a mock server for the requests.
+This command starts a development server for the frontend app, using a mock server to handle requests.
 
 ## Deployments
 
-This app uses a Continuous Deployment workflow leveraging Github Actions. In every commit pushed to the repository, the Github Actions will run a deployment to
-AWS. Right now the deployment flow includes:
+This app uses a Continuous Deployment workflow powered by GitHub Actions. On every commit pushed to the repository, GitHub Actions will trigger a deployment to
+AWS. The deployment process currently includes:
 
-- Infrastructure deployment to AWS. This includes S3 bucket, Cloudfront distribution, etc.
-- Frontend app deployment. The job creates a new build of the app and uploads it to the S3 bucket.
+- **Infrastructure deployment**: Provisions AWS resources such as the S3 bucket, CloudFront distribution, etc.
+- **Frontend deployment**: Builds the frontend app and uploads it to the S3 bucket.
 
-If you want to deploy on your AWS account you just need to fork this repo and add the following secrets for your github actions to work
+To deploy on your own AWS account, simply fork this repository and add the required GitHub Action secrets:
 
 ![GitHub Action Secrets](resources/github-action-secrets.png)
 

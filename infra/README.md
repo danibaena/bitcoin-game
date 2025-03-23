@@ -12,11 +12,16 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 - `npx cdk diff` compare deployed stack with current state
 - `npx cdk synth` emits the synthesized CloudFormation template
 
-## Decisions
+## Key Decisions
 
-- Get Price lambda uses an external third party API (Coincap). To avoid rate limits in third party API, I've added some in memory cache for 20s (while lambda is
-  warm). So in that period, any further request to the endpoint will be served by the cache
-- Dynamo db records in table has a `timeToLiveAttribute` set in the lambda of 1 day
-- Lambda to get or create a new game session will create a cookie that will last also 1 day. That means the player will be able to play during a day with the
-  same score. This was added just to avoid reaching any limit in the free tier, and it's not a game requirement. Resetting the game could be a feature easily
-  added, just by deleting the cookies.
+- The **Get Price** Lambda uses an external third-party API (Coincap). To avoid hitting rate limits, an in-memory cache with a 20-second TTL is implemented
+  while the Lambda is warm. During this period, repeated requests to the endpoint are served from the cache.
+
+- DynamoDB records include a `timeToLiveAttribute` set to expire after 1 day, ensuring automatic cleanup of outdated entries.
+
+- The Lambda responsible for getting or creating a new game session sets a cookie with a 1-day expiration, aligned with the DynamoDB TTL. This allows players to
+  retain their score and continue playing throughout the day, even if they close and reopen their browser.
+
+- I chose to use the same CloudFront distribution for both serving the app and the API. Any request to `/api/*` is forwarded to API Gateway and handled by the
+  corresponding Lambdas. This setup helps avoid CORS issues and simplifies development. However, it may not be ideal for production, as SPAs often have route
+  handling that could conflict with API paths.
