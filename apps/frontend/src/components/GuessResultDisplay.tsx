@@ -64,8 +64,8 @@ type PriceMessageProps = {
 
 const PriceMessage = ({ priceAtGuessTime, comparedPrice }: PriceMessageProps) => {
   if (priceAtGuessTime === comparedPrice && priceAtGuessTime !== null) {
-    return <span>" Price remained the same 🟰"</span>
+    return <span>Price remained the same 🟰</span>
   }
 
-  return <span>{priceAtGuessTime! < comparedPrice! ? " Price went higher 📈" : " Price went lower 📉"}</span>
+  return <span>{priceAtGuessTime! < comparedPrice! ? "Price went higher 📈" : "Price went lower 📉"}</span>
 }
